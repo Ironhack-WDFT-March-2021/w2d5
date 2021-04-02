@@ -2,11 +2,13 @@ class Game {
     constructor() {
         this.backgroundImages;
         this.playerImage;
+        this.coinImage;
     }
 
     setup() {
         this.player = new Player();
         this.background = new Background();
+        this.obstacles = [];
     }
 
     preload() {
@@ -18,11 +20,27 @@ class Game {
             { src: loadImage('assets/background/plx-5.png'), x: 0, speed: 4 }
         ]
         this.playerImage = loadImage('assets/player/bb8.gif');
+        this.coinImage = loadImage('assets/coins/tile000.png');
     }
     draw() {
-        console.log('game drawing');
+        // console.log('game drawing');
         clear();
         this.background.draw();
         this.player.draw();
+        // frameCount is provided by P5
+        // console.log(frameCount)
+        if (frameCount % 60 === 0) {
+            this.obstacles.push(new Obstacle(this.coinImage))
+            // console.log(this.obstacles);
+        }
+        this.obstacles.forEach(function (obstacle) {
+            obstacle.draw();
+        })
+        // this needs to be an arrow function otherwise the context of 'this'
+        // will not be correct
+        this.obstacles = this.obstacles.filter(obstacle => {
+            // console.log(this)
+            obstacle.collision(this.player);
+        })
     }
 }
