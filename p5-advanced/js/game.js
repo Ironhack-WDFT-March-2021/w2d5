@@ -23,15 +23,15 @@ class Game {
         this.coinImage = loadImage('assets/coins/tile000.png');
     }
     draw() {
-        // console.log('game drawing');
         clear();
+        // console.log('game drawing');
         this.background.draw();
         this.player.draw();
         // frameCount is provided by P5
         // console.log(frameCount)
         if (frameCount % 60 === 0) {
             this.obstacles.push(new Obstacle(this.coinImage))
-            // console.log(this.obstacles);
+            console.log(this.obstacles);
         }
         this.obstacles.forEach(function (obstacle) {
             obstacle.draw();
@@ -40,7 +40,11 @@ class Game {
         // will not be correct
         this.obstacles = this.obstacles.filter(obstacle => {
             // console.log(this)
-            obstacle.collision(this.player);
+            if (obstacle.collision(this.player) || obstacle.x < 0) {
+                return false
+            } else {
+                return true
+            }
         })
     }
 }
